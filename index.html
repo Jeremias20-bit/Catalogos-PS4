@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024">
+    <meta name="google" content="notranslate">
+    <title>Playstation 4</title>
+    <link rel="stylesheet" href="Estilos_games.css">
+</head>
+
+<style>
+    body {
+        background-image: url('img/portadaps4.webp');
+        background-position: center;
+        color: #000000;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+
+        .abecedario {
+            text-align: center;
+            margin: 80px 0;
+            /* Incrementa el margen superior */
+            background-color: rgb(0, 0, 0);
+            padding: 20px;
+        }
+
+        .abecedario a {
+            color: rgb(255, 255, 255);
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 35px;
+        }
+
+        .letter-header {
+            font-size: 36px;
+            background-color: #ffffff;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .special-caption {
+            background-color: #ffffff;
+            /* Fondo blanco */
+            padding: 5px 10px;
+            /* Relleno alrededor del texto */
+            border-radius: 5px;
+            /* Bordes redondeados opcionales */
+            font-family: Arial, sans-serif;
+            /* Fuente Arial */
+            font-weight: bold;
+            /* Texto en negrita */
+            margin-top: 25px;
+            /* Ajusta esta medida para mover el texto más abajo */
+        }
+    }
+
+    /* Estilo para el borde azul al seleccionar una figura */
+    @keyframes glow {
+        0% {
+            box-shadow: 0 0 10px rgb(0, 47, 255), 0 0 20px rgb(0, 47, 255), 0 0 30px rgb(0, 47, 255), 0 0 40px rgb(0, 47, 255);
+        }
+
+        50% {
+            box-shadow: 0 0 20px rgb(0, 47, 255), 0 0 30px rgb(0, 47, 255), 0 0 40px rgb(0, 47, 255), 0 0 50px rgb(0, 47, 255);
+        }
+
+        100% {
+            box-shadow: 0 0 10px rgb(0, 47, 255), 0 0 20px rgb(0, 47, 255), 0 0 30px rgb(0, 47, 255), 0 0 40px rgb(0, 47, 255);
+        }
+    }
+
+    .selected {
+        border: 18px solid rgb(0, 47, 255);
+        animation: glow 1.5s infinite alternate;
+    }
+
+
+    /* Posicionamiento del cuadro de suma */
+    #total-suma {
+        position: fixed;
+        top: 8px;
+        right: 10px;
+        /* Cambiado de right a left */
+        background-color: white;
+        border: 8px solid rgb(0, 47, 255);
+        padding: 10px;
+        font-size: 1.6em;
+        font-weight: bold;
+    }
+
+    #mostrar-selecciones {
+        position: fixed;
+        top: 5px;
+        left: 5px;
+        background-color: rgb(0, 47, 255);
+        color: white;
+        border: none;
+        padding: 25px 25px;
+        font-size: 1.3em;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    #mostrar-selecciones:hover {
+        background-color: rgb(0, 47, 255);
+    }
+
+    #cuadro-selecciones {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        max-width: 600px;
+        background-color: white;
+        border: 5px solid rgb(0, 47, 255);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        display: none;
+        z-index: 1000;
+        cursor: default;
+    }
+
+
+    #contenedor-imagenes {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 10px;
+    }
+
+    #contenedor-imagenes img {
+        max-width: 150px;
+        height: auto;
+        cursor: pointer;
+    }
+
+
+    #cuadro-selecciones h2 {
+        text-align: center;
+        color: rgb(0, 47, 255);
+        margin-bottom: 10px;
+    }
+
+    #cuadro-selecciones .item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    #cuadro-selecciones .item img {
+        width: 150px;
+        height: 150px;
+        margin-right: 10px;
+        border: 2px solid rgb(0, 47, 255);
+        border-radius: 5px;
+    }
+
+    #cerrar-cuadro {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgb(0, 47, 255);
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        /* Aumenta el tamaño del botón */
+        cursor: pointer;
+        font-size: 1.2em;
+        /* Aumenta el tamaño del texto */
+        font-weight: bold;
+        border-radius: 10px;
+        /* Ajusta el radio para bordes redondeados */
+    }
+
+    #cuadro-selecciones button {
+        background-color: rgb(0, 47, 255);
+        color: white;
+        border: none;
+        padding: 23px 20px;
+        /* Aumenta el tamaño del botón */
+        font-size: 1.4em;
+        /* Aumenta el tamaño del texto */
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    #cuadro-selecciones button:hover {
+        background-color: rgb(0, 47, 255);
+    }
+
+    #cerrar-cuadro:hover {
+        background-color: rgb(0, 47, 255);
+    }
+
+
+    /* Estilo para impresión */
+    @media print {
+
+        /* Ocultar todo por defecto */
+        body * {
+            display: none;
+        }
+
+        /* Mostrar solo el cuadro de selecciones y su contenido */
+        #cuadro-selecciones,
+        #cuadro-selecciones * {
+            display: block;
+        }
+
+        /* Asegurar que el cuadro de selecciones se muestre correctamente */
+        #cuadro-selecciones {
+            position: static !important;
+            transform: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            width: 100% !important;
+        }
+
+    }
+</style>
+
+<body>
+    <div class="abecedario">
+        <a href="#section-#">#</a>
+        <a href="#section-A">A</a>
+        <a href="#section-B">B</a>
+        <a href="#section-C">C</a>
+        <a href="#section-D">D</a>
+        <a href="#section-E">E</a>
+        <a href="#section-F">F</a>
+        <a href="#section-G">G</a>
+        <a href="#section-H">H</a>
+        <a href="#section-I">I</a>
+        <a href="#section-J">J</a>
+        <a href="#section-K">K</a>
+        <a href="#section-L">L</a>
+        <a href="#section-M">M</a>
+        <a href="#section-N">N</a>
+        <a href="#section-O">O</a>
+        <a href="#section-P">P</a>
+        <a href="#section-Q">Q</a>
+        <a href="#section-R">R</a>
+        <a href="#section-S">S</a>
+        <a href="#section-T">T</a>
+        <a href="#section-U">U</a>
+        <a href="#section-V">V</a>
+        <a href="#section-W">W</a>
+        <a href="#section-X">X</a>
+        <a href="#section-Y">Y</a>
+        <a href="#section-Z">Z</a>
+    </div>
+
+    <div id="total-suma">Total: 0 GB</div>
+    <div id="caption-info" class="caption-info"></div>
+    <button id="mostrar-selecciones">IMPRESI🌀N</button>
+
+    <div id="cuadro-selecciones">
+        <button id="cerrar-cuadro">Cerrar</button>
+        <h2>Total Seleccionado: <span id="total-seleccionado"></span> GB</h2>
+        <div id="lista-selecciones"></div>
+        <button onclick="window.print()">Imprimir</button>
+    </div>
+
+    <div class="game-section" id="section-(#)">
+        <div class="letter-header">Porcentajes Aproximados Juegos_ps4</div>
+        <div class="games">
+
+
+            <div class="game-section" id="section-(#)">
+                <div class="letter-header">LLEGAR AL PORCENTAJE EN (GB) A 🎮450GB LIMITE</div>
+                <div class="games">
+
+                    <!-- A -->
+                    <div class="game-section" id="section-A">
+                        <div class="letter-header">A</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/A/AnnoMutationem.webp" alt="Anno Mutationem">
+                                <figcaption class="special-caption">9.4_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/A/a way out.webp" alt="Anno Mutationem">
+                                <figcaption class="special-caption">16_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- B -->
+                    <div class="game-section" id="section-B">
+                        <div class="letter-header">B</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/B/Bloodborne.webp" alt="Bloodborne">
+                                <figcaption class="special-caption">32.6_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- C -->
+                    <div class="game-section" id="section-C">
+                        <div class="letter-header">C</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/C/CALL OF DUTY MWW2.webp" alt="Call of Duty WWII">
+                                <figcaption class="special-caption">93.2_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/C/Control-ultimate.webp" alt="Control Ultimate">
+                                <figcaption class="special-caption">36_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- D -->
+                    <div class="game-section" id="section-D">
+                        <div class="letter-header">D</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Dark Soul 3.webp" alt="Dark Souls 3">
+                                <figcaption class="special-caption">23_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Dark soul 1.webp" alt="Dark Souls 3">
+                                <figcaption class="special-caption">7_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Dark Soul ll.webp" alt="Dark Souls 2">
+                                <figcaption class="special-caption">10.7_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Demon Slayer 2.webp" alt="Demon Slayer 2">
+                                <figcaption class="special-caption">20.6_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Devil-MY-cry-5.webp" alt="Devil May Cry 5">
+                                <figcaption class="special-caption">40.9_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Doom Eternal.webp" alt="Doom Eternal">
+                                <figcaption class="special-caption">92.8_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Dragon ball fither z.webp" alt="Dragon Ball FighterZ">
+                                <figcaption class="special-caption">6.8_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Dragon ball Kakarot.webp" alt="Dragon Ball Kakarot">
+                                <figcaption class="special-caption">64_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/D/Drive-Club.webp" alt="Drive Club">
+                                <figcaption class="special-caption">32.6_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- E -->
+                    <div class="game-section" id="section-E">
+                        <div class="letter-header">E</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/E/Evil West.webp" alt="Evil West">
+                                <figcaption class="special-caption">25.8_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- F -->
+                    <div class="game-section" id="section-F">
+                        <div class="letter-header">F</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/F/fc 2025.webp" alt="FC 2025">
+                                <figcaption class="special-caption">43.3_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/F/FC 2026.webp" alt="FC 2026">
+                                <figcaption class="special-caption">75.4_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- G -->
+                    <div class="game-section" id="section-G">
+                        <div class="letter-header">G</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/G/Ghost of Tsushima.webp" alt="Ghost of Tsushima">
+                                <figcaption class="special-caption">45.4_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/G/God of War-4.webp" alt="God of War 4">
+                                <figcaption class="special-caption">43.3_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/G/God of War-5.webp" alt="God of War Ragnarok">
+                                <figcaption class="special-caption">103_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/G/Gravity-Rush-1.webp" alt="Gravity Rush 1">
+                                <figcaption class="special-caption">9.2_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/G/Gravity-Rush-2.webp" alt="Gravity Rush 2">
+                                <figcaption class="special-caption">17.5_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- H -->
+                    <div class="game-section" id="section-H">
+                        <div class="letter-header">H</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/H/Hollow knight silksong.webp" alt="Hollow Knight">
+                                <figcaption class="special-caption">4.1_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/H/Hollow knight.webp" alt="Hollow Knight Silksong">
+                                <figcaption class="special-caption">1.3_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/H/Horizon Forbidden.webp" alt="Horizon Forbidden West">
+                                <figcaption class="special-caption">83.5_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- I -->
+                    <div class="game-section" id="section-I">
+                        <div class="letter-header">I</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/I/Injustice2.webp" alt="Injustice 2">
+                                <figcaption class="special-caption">32.2_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- J -->
+                    <div class="game-section" id="section-J">
+                        <div class="letter-header">J</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/J/Jump-force.webp" alt="Jump Force">
+                                <figcaption class="special-caption">36.7_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/J/just-Dance2021.webp" alt="Just Dance 2021">
+                                <figcaption class="special-caption">18.3_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- K 
+                    <div class="game-section" id="section-K">
+                        <div class="letter-header">K</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game K">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <!-- L -->
+                    <div class="game-section" id="section-L">
+                        <div class="letter-header">L</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/L/Little nigmares 3.webp" alt="Little Nightmares 3">
+                                <figcaption class="special-caption">20.8_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- M -->
+                    <div class="game-section" id="section-M">
+                        <div class="letter-header">M</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/M/Mortal 11.webp" alt="Mortal Kombat 11">
+                                <figcaption class="special-caption">69.3_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/M/MortalXL.webp" alt="Mortal Kombat XL">
+                                <figcaption class="special-caption">39.9_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- N -->
+                    <div class="game-section" id="section-N">
+                        <div class="letter-header">N</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/N/NFS-Heat.webp" alt="Need for Speed Heat">
+                                <figcaption class="special-caption">32_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/N/Ninja-gainder-Reagebound.webp" alt="Ninja Gaiden Ragebound">
+                                <figcaption class="special-caption">1.7_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- O -->
+                    <div class="game-section" id="section-O">
+                        <div class="letter-header">O</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/O/one-piece-warrior-4.webp" alt="One Piece Pirate Warriors 4">
+                                <figcaption class="special-caption">33.5_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- P -->
+                    <div class="game-section" id="section-P">
+                        <div class="letter-header">P</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/P/Principe de persia crown.webp"
+                                    alt="Prince of Persia The Lost Crown">
+                                <figcaption class="special-caption">16.5_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- Q 
+                    <div class="game-section" id="section-Q">
+                        <div class="letter-header">Q</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game Q">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <!-- R -->
+                    <div class="game-section" id="section-R">
+                        <div class="letter-header">R</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/R/Rachet-Clank.webp" alt="Ratchet & Clank">
+                                <figcaption class="special-caption">25.6_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/R/Resident-2evil.webp" alt="Resident Evil 2">
+                                <figcaption class="special-caption">23.4_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/R/Resident-4evil.webp" alt="Resident Evil 4">
+                                <figcaption class="special-caption">37.8_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/R/Rockey-League.webp" alt="Rocket League">
+                                <figcaption class="special-caption">31_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- S -->
+                    <div class="game-section" id="section-S">
+                        <div class="letter-header">S</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/S/SEKIRO.webp" alt="Sekiro">
+                                <figcaption class="special-caption">15.5_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/S/shinobi.webp" alt="Shinobi">
+                                <figcaption class="special-caption">9.2_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/S/Street fighter 6.webp" alt="Street Fighter 6">
+                                <figcaption class="special-caption">68.2_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/S/sonic-crossworld.webp" alt="Sonic CrossWorld">
+                                <figcaption class="special-caption">24_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/S/Spiderman-Morales.webp" alt="Spider-Man Miles Morales">
+                                <figcaption class="special-caption">45.5_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/S/SPYRO.webp" alt="Spyro">
+                                <figcaption class="special-caption">34_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- T -->
+                    <div class="game-section" id="section-T">
+                        <div class="letter-header">T</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/T/the forest.webp" alt="The Forest">
+                                <figcaption class="special-caption">1.9_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/T/The last of us 1.webp" alt="The Last of Us Part I">
+                                <figcaption class="special-caption">40.8_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/T/The last of us ll.webp" alt="The Last of Us Part II">
+                                <figcaption class="special-caption">78_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/T/Tomb Raider 456.webp" alt="Tomb Raider 456">
+                                <figcaption class="special-caption">9.5_GB</figcaption>
+                            </figure>
+
+                            <figure class="figure-item">
+                                <img src="img/Ps4/T/Tomb-RaiderRise.webp" alt="Rise of the Tomb Raider">
+                                <figcaption class="special-caption">14.4_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- U -->
+                    <div class="game-section" id="section-U">
+                        <div class="letter-header">U</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/U/unchated-the-lost-legacy.webp" alt="Uncharted The Lost Legacy">
+                                <figcaption class="special-caption">45.5_GB</figcaption>
+                            </figure>
+
+                        </div>
+                    </div>
+
+                    <!-- V 
+                    <div class="game-section" id="section-V">
+                        <div class="letter-header">V</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game V">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <!-- W 
+                    <div class="game-section" id="section-W">
+                        <div class="letter-header">W</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game W">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <!-- X 
+                    <div class="game-section" id="section-X">
+                        <div class="letter-header">X</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game X">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <!-- Y 
+                    <div class="game-section" id="section-Y">
+                        <div class="letter-header">Y</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game Y">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <!-- Z 
+                    <div class="game-section" id="section-Z">
+                        <div class="letter-header">Z</div>
+                        <div class="games">
+                            <figure class="figure-item">
+                                <img src="img/Ps4/.webp" alt="Game Z">
+                                <figcaption class="special-caption">_GB</figcaption>
+                            </figure>
+                        </div>
+                    </div>-->
+
+                    <button class="volver-btn" onclick="window.location.href='index.html'">❌</button>
+
+                    <button class="inicio-btn" onclick="window.scrollTo(0, 0);">☝</button>
+
+                    <script>
+                        let totalGB = 0;
+                        const figures = document.querySelectorAll('.figure-item');
+                        const totalSuma = document.getElementById('total-suma');
+                        const mostrarSelecciones = document.getElementById('mostrar-selecciones');
+                        const cuadroSelecciones = document.getElementById('cuadro-selecciones');
+                        const listaSelecciones = document.getElementById('lista-selecciones');
+                        const totalSeleccionado = document.getElementById('total-seleccionado');
+                        const cerrarCuadro = document.getElementById('cerrar-cuadro');
+
+                        function updateTotal() {
+                            totalSuma.textContent = `Total: ${totalGB.toFixed(2)} GB`;
+                            totalSeleccionado.textContent = totalGB.toFixed(2);
+                        }
+
+                        figures.forEach((figure) => {
+                            figure.addEventListener('click', function () {
+                                const captionText = this.querySelector('.special-caption').textContent;
+                                let valueGB = 0;
+                                if (captionText.includes('_GB')) {
+                                    valueGB = parseFloat(captionText.replace('_GB', ''));
+                                } else if (captionText.includes('_MB')) {
+                                    valueGB = parseFloat(captionText.replace('_MB', '')) / 1024;
+                                }
+
+                                if (this.classList.contains('selected')) {
+                                    this.classList.remove('selected');
+                                    totalGB -= valueGB;
+                                } else {
+                                    this.classList.add('selected');
+                                    totalGB += valueGB;
+                                }
+
+                                updateTotal();
+                            });
+                        });
+
+                        mostrarSelecciones.addEventListener('click', () => {
+                            listaSelecciones.innerHTML = '';
+                            const selectedFigures = document.querySelectorAll('.figure-item.selected');
+                            selectedFigures.forEach((figure) => {
+                                const captionText = figure.querySelector('.special-caption').textContent;
+                                const imageSrc = figure.querySelector('img').src;
+
+                                const itemDiv = document.createElement('div');
+                                itemDiv.classList.add('item');
+
+                                const imgElement = document.createElement('img');
+                                imgElement.src = imageSrc;
+
+                                const captionElement = document.createElement('span');
+                                captionElement.textContent = captionText;
+
+                                const closeButton = document.createElement('button');
+                                closeButton.textContent = 'X';
+                                closeButton.classList.add('remove-btn');
+                                closeButton.addEventListener('click', () => {
+                                    if (confirm(`¿Deseas eliminar ${captionText}?`)) {
+                                        figure.classList.remove('selected');
+                                        let valueGB = 0;
+                                        if (captionText.includes('_GB')) {
+                                            valueGB = parseFloat(captionText.replace('_GB', ''));
+                                        } else if (captionText.includes('_MB')) {
+                                            valueGB = parseFloat(captionText.replace('_MB', '')) / 1024;
+                                        }
+                                        totalGB -= valueGB;
+                                        updateTotal();
+                                        itemDiv.remove();
+                                    }
+                                });
+
+                                itemDiv.appendChild(imgElement);
+                                itemDiv.appendChild(captionElement);
+                                itemDiv.appendChild(closeButton);
+
+                                listaSelecciones.appendChild(itemDiv);
+                            });
+
+                            updateTotal();
+                            cuadroSelecciones.style.display = 'block';
+                        });
+
+                        cerrarCuadro.addEventListener('click', () => {
+                            cuadroSelecciones.style.display = 'none';
+                        });
+                    </script>
+
+                    <script>
+                        const cuadro = document.getElementById('cuadro-selecciones');
+                        let isDragging = false;
+                        let offsetX = 0, offsetY = 0;
+
+                        // Asegurar que el cuadro tenga `position: absolute`
+                        cuadro.style.position = "block";
+
+                        // Evitar el desplazamiento de la página al mover el cuadro en móviles
+                        function disableScroll(e) {
+                            e.preventDefault();
+                        }
+
+                        // Evento para empezar a arrastrar con el mouse
+                        cuadro.addEventListener('mousedown', (e) => {
+                            isDragging = true;
+                            offsetX = e.clientX - cuadro.offsetLeft;
+                            offsetY = e.clientY - cuadro.offsetTop;
+                            cuadro.style.cursor = "grabbing";
+                        });
+
+                        // Evento para mover el cuadro con el mouse
+                        document.addEventListener('mousemove', (e) => {
+                            if (isDragging) {
+                                cuadro.style.left = `${e.clientX - offsetX}px`;
+                                cuadro.style.top = `${e.clientY - offsetY}px`;
+                            }
+                        });
+
+                        // Evento para soltar el cuadro con el mouse
+                        document.addEventListener('mouseup', () => {
+                            isDragging = false;
+                            cuadro.style.cursor = "grab";
+                        });
+
+                        // Evento para empezar a arrastrar con el tacto (evita scroll)
+                        cuadro.addEventListener('touchstart', (e) => {
+                            const touch = e.touches[0];
+                            isDragging = true;
+                            offsetX = touch.clientX - cuadro.offsetLeft;
+                            offsetY = touch.clientY - cuadro.offsetTop;
+                            cuadro.style.cursor = "grabbing";
+
+                            // Evitar que la página se desplace
+                            document.body.addEventListener('touchmove', disableScroll, { passive: false });
+                        });
+
+                        // Evento para mover el cuadro con el tacto
+                        document.addEventListener('touchmove', (e) => {
+                            if (isDragging) {
+                                const touch = e.touches[0];
+                                cuadro.style.left = `${touch.clientX - offsetX}px`;
+                                cuadro.style.top = `${touch.clientY - offsetY}px`;
+                            }
+                        });
+
+                        // Evento para soltar el cuadro con el tacto (reactivar scroll)
+                        document.addEventListener('touchend', () => {
+                            isDragging = false;
+                            cuadro.style.cursor = "grab";
+
+                            // Permitir que la página se desplace nuevamente
+                            document.body.removeEventListener('touchmove', disableScroll);
+                        });
+
+
+                    </script>
+
+
+</body>
+
+</html>
